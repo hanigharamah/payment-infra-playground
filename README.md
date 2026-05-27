@@ -33,13 +33,14 @@ Tests configurable fraud rules against a deterministic synthetic dataset.
 - Evaluates velocity, amount, device, IP, and decline-heavy rules.
 - Reports confusion matrix, precision, recall, F1 score, false positive rate, fraud prevented, friction cost, and net benefit.
 
-### Digital Wallet Simulator
+### Wallet Operations Dashboard
 
-Compares event-wallet and super-app-wallet operating models.
+Simulates the internal dashboard used by a closed-loop wallet operations team.
 
-- Event mode: Expo-style cashless site, prepaid fallback, offline POS, refund pressure.
-- Super-app mode: stored balance, tokenized cards, instant payout share, payout holds.
-- Outputs wallet adoption, success rate, latency, fee savings, support load, reconciliation breaks, and risk queue.
+- Monitors live ledger activity, float positions, approval queues, KYC limits, and cost of acceptance.
+- Includes six views: Activity, Balances, Reconciliation, Approvals, KYC & Limits, and Cost Analytics.
+- Simulates a day of wallet transactions and updates all views in memory.
+- Shows double-entry ledger lines for expanded transactions.
 
 ### Cross-Border Payment Visualizer
 
@@ -105,8 +106,8 @@ npm run preview
 - `/routing` - Payment Routing Simulator
 - `/settlement` - Merchant Settlement Calculator
 - `/fraud` - Fraud Detection Playground
-- `/wallets` - Digital Wallet Simulator
 - `/cross-border` - Cross-Border Payment Visualizer
+- `/wallet-ops` - Wallet Operations Dashboard
 
 ## Validation Checklist
 
@@ -117,8 +118,8 @@ Before shipping changes:
 - Generate/process routing transactions.
 - Export a settlement report.
 - Generate and run fraud tests.
-- Switch wallet modes and presets.
 - Switch cross-border presets and custom amounts.
+- Run Wallet Ops simulation, review approvals, inject a variance, and resolve exceptions.
 - Check mobile layout around 375px width.
 - Confirm charts render without console errors.
 
@@ -262,7 +263,7 @@ The "Simulate Day" function generates around 100 transactions, which is unrealis
 
 **Next step**
 
-I'd add cost-of-acceptance optimization recommendations. The dashboard currently shows costs but doesn't suggest actions. A real operations tool would surface things like "shift 20% of top-ups from cards to bank transfers and save SAR 51K/year" with the ability to A/B test the recommendation. That's the line between "monitoring tool" and "decision tool." It's where wallet infrastructure PMs spend most of their time.
+I'd add policy simulation on top of the current cost recommendations. The dashboard shows that card top-ups and instant payouts are expensive, but a real PM would want to test policy changes before rollout. For example: default drivers to standard payout, add a fee for instant payout, or nudge Tier 1 users toward bank transfer top-ups. The next version should show expected savings, approval impact, and user friction before a policy is shipped.
 
 ---
 

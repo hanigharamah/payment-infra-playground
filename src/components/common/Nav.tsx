@@ -5,8 +5,8 @@ const links = [
   { to: '/routing', label: 'Routing' },
   { to: '/settlement', label: 'Settlement' },
   { to: '/fraud', label: 'Fraud' },
-  { to: '/wallets', label: 'Wallets' },
   { to: '/cross-border', label: 'Cross-Border' },
+  { to: '/wallet-ops', label: 'Wallet Ops' },
 ]
 
 export default function Nav() {

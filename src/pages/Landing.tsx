@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import {
-  Workflow, Calculator, Shield, WalletCards, Globe, ArrowRight, Github, Linkedin,
+  Workflow, Calculator, Shield, Globe, WalletCards, ArrowRight, Github, Linkedin,
 } from 'lucide-react'
 import Button from '../components/common/Button'
 import Nav from '../components/common/Nav'
@@ -53,15 +53,6 @@ const toolCards = [
     cta: 'Detect Fraud',
   },
   {
-    icon: WalletCards,
-    title: 'Digital Wallet Simulator',
-    description:
-      'Switch between Expo-style event wallets and super-app wallets. Tune adoption, stored balance, tokenized cards, fallback coverage, refund pressure, and payout holds.',
-    useCases: 'Expo cashless sites · prepaid fallback · delivery app wallets · driver payouts',
-    href: '/wallets',
-    cta: 'Simulate Wallets',
-  },
-  {
     icon: Globe,
     title: 'Cross-Border Payment Visualizer',
     description:
@@ -69,6 +60,15 @@ const toolCards = [
     useCases: 'FIFA tourists · Expo merchants · super-app wallet remittance · vendor payouts',
     href: '/cross-border',
     cta: 'Visualize Cross-Border',
+  },
+  {
+    icon: WalletCards,
+    title: 'Wallet Operations Dashboard',
+    description:
+      'The behind-the-scenes view of a closed-loop wallet. Live ledger activity, float reconciliation, approval queues, KYC limits, and cost of acceptance.',
+    useCases: 'Careem Pay ops · STC Pay float · Tabby approvals · wallet ledger controls',
+    href: '/wallet-ops',
+    cta: 'Open Wallet Ops',
   },
 ]
 

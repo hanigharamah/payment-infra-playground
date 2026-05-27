@@ -5,8 +5,8 @@ const Landing = lazy(() => import('./pages/Landing'))
 const Routing = lazy(() => import('./pages/Routing'))
 const Settlement = lazy(() => import('./pages/Settlement'))
 const Fraud = lazy(() => import('./pages/Fraud'))
-const Wallets = lazy(() => import('./pages/Wallets'))
 const CrossBorder = lazy(() => import('./pages/CrossBorder'))
+const WalletOps = lazy(() => import('./pages/WalletOps'))
 
 function PageLoader() {
   return (
@@ -28,8 +28,8 @@ export default function App() {
           <Route path="/routing" element={<Routing />} />
           <Route path="/settlement" element={<Settlement />} />
           <Route path="/fraud" element={<Fraud />} />
-          <Route path="/wallets" element={<Wallets />} />
           <Route path="/cross-border" element={<CrossBorder />} />
+          <Route path="/wallet-ops" element={<WalletOps />} />
         </Routes>
       </Suspense>
     </BrowserRouter>
