@@ -174,6 +174,9 @@ export default function RuleBuilder({ rules, gateways, onAdd, onDelete }: Props)
                     </span>
                   )}
                 </span>
+                {rule.note && (
+                  <p className="text-xs text-slate-400 mt-1">{rule.note}</p>
+                )}
               </div>
             </div>
             <button

@@ -30,6 +30,11 @@ function calcFee(gw: Gateway, amount: number): number {
   return gw.baseFee + (gw.percentageFee / 100) * amount
 }
 
+function supportsTransaction(gw: Gateway, tx: Transaction): boolean {
+  return gw.supportedCurrencies.includes(tx.currency) &&
+    gw.supportedTransactionTypes.includes(tx.transactionType)
+}
+
 export function processTransaction(
   tx: Transaction,
   rules: RoutingRule[],
@@ -43,6 +48,32 @@ export function processTransaction(
 
     const primary = enabled.find((g) => g.id === rule.action.primaryGateway)
     if (!primary) continue
+    if (!supportsTransaction(primary, tx)) {
+      const fallback = rule.action.fallbackGateway
+        ? enabled.find((g) => g.id === rule.action.fallbackGateway && supportsTransaction(g, tx))
+        : null
+      if (!fallback) {
+        return {
+          ...tx,
+          routedTo: primary.id,
+          outcome: 'declined',
+          matchedRule: rule.id,
+          fee: 0,
+          fallbackUsed: false,
+          declineReason: 'Gateway does not support this currency or transaction type',
+        }
+      }
+      const fbApproved = Math.random() * 100 < fallback.successRate
+      return {
+        ...tx,
+        routedTo: fallback.id,
+        outcome: fbApproved ? 'approved' : 'declined',
+        matchedRule: rule.id,
+        fee: fbApproved ? calcFee(fallback, tx.amount) : 0,
+        fallbackUsed: true,
+        declineReason: fbApproved ? undefined : 'Fallback gateway declined',
+      }
+    }
 
     const approved = Math.random() * 100 < primary.successRate
     if (approved) {
@@ -53,21 +84,22 @@ export function processTransaction(
       const fallback = enabled.find((g) => g.id === rule.action.fallbackGateway)
       if (fallback) {
         const fbApproved = Math.random() * 100 < fallback.successRate
-        return {
+      return {
           ...tx,
           routedTo: fallback.id,
           outcome: fbApproved ? 'approved' : 'declined',
           matchedRule: rule.id,
           fee: fbApproved ? calcFee(fallback, tx.amount) : 0,
           fallbackUsed: true,
+          declineReason: fbApproved ? undefined : 'Fallback gateway declined',
         }
       }
     }
 
-    return { ...tx, routedTo: primary.id, outcome: 'declined', matchedRule: rule.id, fee: 0, fallbackUsed: false }
+    return { ...tx, routedTo: primary.id, outcome: 'declined', matchedRule: rule.id, fee: 0, fallbackUsed: false, declineReason: 'Gateway declined' }
   }
 
-  return { ...tx, outcome: 'declined', matchedRule: 'no-match', fee: 0 }
+  return { ...tx, outcome: 'declined', matchedRule: 'no-match', fee: 0, declineReason: 'No matching route' }
 }
 
 function weightedRandom<T>(items: { value: T; weight: number }[]): T {
@@ -93,9 +125,10 @@ const DEFAULT_CURRENCIES = [
 ]
 
 const DEFAULT_TYPES = [
+  { value: 'mada_domestic', weight: 15 },
   { value: 'ticket_purchase', weight: 20 }, { value: 'food_delivery', weight: 20 },
   { value: 'ride_payment', weight: 20 },    { value: 'retail', weight: 20 },
-  { value: 'p2p_transfer', weight: 20 },
+  { value: 'p2p_transfer', weight: 15 },
 ]
 
 export function generateTransactions(count: number, scenario: ScenarioConfig | null): Transaction[] {

@@ -80,18 +80,18 @@ export function generateDataset(): FraudTransaction[] {
     })
   }
 
-  // Pattern 3: Card testing (4) — rapid small transactions then big hit
-  // 4 micro-txns (SAR 1-3) in 90s then one large. Triggers "amount < 5" AND ">4 per minute"
+  // Pattern 3: Card testing — rapid small transactions then big hit
+  // 6 micro-txns (SAR 1-3) in 90s then one large. The large hit sees enough prior micro-transactions to trigger the decline-heavy proxy.
   const cardTestBase = 54_000_000 // 15:00
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 7; i++) {
     txns.push({
       id: id(),
       cardId: 'CARD-F07',
       deviceId: 'DEV-F07',
       ipCountry: 'US',
-      amount: i < 3 ? randomInt(1, 3) : randomInt(300, 450), // 3 micro, 1 big
-      timestamp: cardTestBase + i * 20_000, // 20s apart, all within 1 min
-      type: i < 3 ? 'retail' : 'ticket',
+      amount: i < 6 ? randomInt(1, 3) : randomInt(300, 450),
+      timestamp: cardTestBase + i * 15_000,
+      type: i < 6 ? 'retail' : 'ticket',
       isFraud: true,
       fraudPattern: 'card-test',
     })
@@ -104,7 +104,7 @@ export function generateDataset(): FraudTransaction[] {
       id: id(),
       cardId: `CARD-F${i + 8}`,
       deviceId: `DEV-F${i + 8}`,
-      ipCountry: pick(['CN', 'RU', 'NG']),
+      ipCountry: pick(['DE', 'BR']),
       amount: randomInt(420, 480), // above 400 threshold to trigger "High-value rapid device activity"
       timestamp: atoBase + i * 45_000,
       type: 'retail',
@@ -159,6 +159,45 @@ function buildContextCounts(
   return result
 }
 
+function countPriorMicroTransactions(
+  txns: FraudTransaction[],
+  txn: FraudTransaction,
+  timeWindow: 'minute' | 'hour' | 'day',
+): number {
+  const windowMs: Record<string, number> = {
+    minute: 60_000,
+    hour: 3_600_000,
+    day: 86_400_000,
+  }
+  const wMs = windowMs[timeWindow]
+  return txns.filter(other =>
+    other.cardId === txn.cardId &&
+    other.id !== txn.id &&
+    other.timestamp < txn.timestamp &&
+    txn.timestamp - other.timestamp < wMs &&
+    other.amount < 5
+  ).length
+}
+
+function moreSevere(
+  current: FraudTransaction['outcome'],
+  next: FraudRule['action'],
+): FraudTransaction['outcome'] {
+  const severity: Record<NonNullable<FraudTransaction['outcome']>, number> = {
+    approved: 0,
+    flagged: 1,
+    challenged: 2,
+    declined: 3,
+  }
+  const mapped: Record<FraudRule['action'], NonNullable<FraudTransaction['outcome']>> = {
+    flag: 'flagged',
+    challenge: 'challenged',
+    decline: 'declined',
+  }
+  const nextOutcome = mapped[next]
+  return severity[nextOutcome] > severity[current ?? 'approved'] ? nextOutcome : current
+}
+
 export function evaluateRules(
   transactions: FraudTransaction[],
   rules: FraudRule[],
@@ -192,16 +231,12 @@ export function evaluateRules(
       } else if (metric === 'amount') {
         value = txn.amount
       } else if (metric === 'declines') {
-        // Simulate: card testers get high decline count — approximate by using low-amount card pattern
-        value = txn.fraudPattern === 'card-test' && txn.amount < 5 ? 7 : 0
+        value = countPriorMicroTransactions(transactions, txn, timeWindow)
       }
 
       if (compare(value, operator, threshold)) {
         matchedRules.push(rule.name)
-        if (rule.action === 'decline') outcome = 'declined'
-        else if (rule.action === 'challenge') outcome = 'challenged'
-        else if (rule.action === 'flag' && outcome === 'approved') outcome = 'flagged'
-        break // first match wins
+        outcome = moreSevere(outcome, rule.action)
       }
     }
 

@@ -7,20 +7,20 @@ import Nav from '../components/common/Nav'
 
 const problemItems = [
   {
-    label: 'FIFA 2034 & Expo Riyadh 2030',
+    label: 'Mega-Event Payment Load',
     body: '3.4 million ticket transactions in 90 days. Peak throughput hits 40,000 per minute during group-stage draws. About 70% are domestic mada payments; the rest split across 22 currencies. Single-gateway setups fail here. The question is not whether routing matters, but how many milliseconds you can afford to lose on a fallback.',
   },
   {
-    label: 'Careem Pay',
+    label: 'Super-App Wallet',
     body: 'One app, 14 verticals, three settlement cycles. A ride payment, food delivery, wallet top-up, and instant payout can look similar on the surface but need different rails: speed for rides, cost control for food, risk checks for wallet balance, and compliance-grade flows for embedded remittance. The orchestration layer is the product.',
   },
   {
     label: 'Cloud Kitchen Payouts',
-    body: '8,000 cloud kitchen operators on Careem NOW want same-day payouts. Banks offer T+2. The float cost at scale is real. Instant payout rails change the unit economics for the whole marketplace, not just for the operators who ask for it.',
+    body: '8,000 cloud kitchen operators on a delivery platform want same-day payouts. Banks offer T+2. The float cost at scale is real. Instant payout rails change the unit economics for the whole marketplace, not just for the operators who ask for it.',
   },
   {
     label: 'Cross-border Payment Corridors',
-    body: 'A Chinese tourist paying for FIFA tickets, an international merchant settling into SAR, and a super-app wallet sending earnings home all ask the same question: which rail gives the best mix of cost, speed, transparency, and regulatory comfort?',
+    body: 'An international tourist purchase, an international merchant settling into SAR, and a super-app wallet sending earnings home all ask the same question: which rail gives the best mix of cost, speed, transparency, and regulatory comfort?',
   },
 ]
 
@@ -30,7 +30,7 @@ const toolCards = [
     title: 'Payment Routing Simulator',
     description:
       'Configure Checkout.com, HyperPay, and Moyasar as gateways. Build rules: SAR under SAR 50 routes to Moyasar, EUR over €100 goes to Checkout.com. Run 50 transactions and see the fee delta.',
-    useCases: 'FIFA ticketing · Careem multi-vertical · instant vs. standard payouts',
+    useCases: 'Mega-event ticketing · super-app multi-vertical · instant vs. standard payouts',
     href: '/routing',
     cta: 'Try Routing',
   },
@@ -57,7 +57,7 @@ const toolCards = [
     title: 'Cross-Border Payment Visualizer',
     description:
       'Compare correspondent banking, stablecoin rails, and regional payment networks for the same corridor. Model tourist payments, platform-wallet remittance, and merchant settlement side by side.',
-    useCases: 'FIFA tourists · Expo merchants · super-app wallet remittance · vendor payouts',
+    useCases: 'Tourist corridors · international exposition merchants · super-app wallet remittance · vendor payouts',
     href: '/cross-border',
     cta: 'Visualize Cross-Border',
   },
@@ -66,7 +66,7 @@ const toolCards = [
     title: 'Wallet Operations Dashboard',
     description:
       'The behind-the-scenes view of a closed-loop wallet. Live ledger activity, float reconciliation, approval queues, KYC limits, and cost of acceptance.',
-    useCases: 'Careem Pay ops · STC Pay float · Tabby approvals · wallet ledger controls',
+    useCases: 'Wallet ops teams · safeguarded float controls · approvals · ledger integrity',
     href: '/wallet-ops',
     cta: 'Open Wallet Ops',
   },
@@ -93,7 +93,7 @@ export default function Landing() {
           </h1>
 
           <p className="text-xl leading-relaxed text-slate-600 mb-4 max-w-2xl">
-            How do you route 3 million FIFA 2034 ticket purchases across 40 currencies in 30 days without a meltdown?
+            How do you route 3 million mega-event ticket purchases across 40 currencies in 30 days without a meltdown?
           </p>
           <p className="text-base text-slate-500 mb-3 max-w-xl">
             This is the sandbox. Five tools built around real infrastructure decisions in MENA payments.
@@ -119,10 +119,10 @@ export default function Landing() {
           {/* Stats: compact portfolio summary */}
           <div className="mt-16 pt-8 border-t border-slate-200 flex flex-wrap items-center gap-x-12 gap-y-4">
             {[
-              { value: '3M+', label: 'FIFA transactions modeled' },
+              { value: '3.4M', label: 'mega-event transactions simulated per 90-day scenario' },
               { value: '5', label: 'payment simulators' },
               { value: 'SAR · USD · EUR · GBP · AED · INR · CNY', label: 'supported currencies' },
-              { value: '182ms', label: 'best gateway latency in stack' },
+              { value: '182ms', label: 'Checkout.com baseline latency' },
             ].map(({ value, label }) => (
               <div key={label}>
                 <div className="text-lg font-bold tabular-nums text-slate-900">{value}</div>
@@ -149,7 +149,7 @@ export default function Landing() {
             </div>
             <div className="lg:col-span-8 self-end">
               <p className="text-base leading-relaxed text-slate-600 max-w-xl">
-                Saudi Arabia is at the center of a payment infrastructure inflection point. FIFA 2034. Expo 2030. Vision 2030 fintech licensing. The decisions made in the next three years will define the stack for a decade.
+                Saudi Arabia is at the center of a payment infrastructure inflection point. Large-scale sporting events, international expositions, and Vision 2030 fintech licensing all raise the bar. The decisions made in the next three years will define the stack for a decade.
               </p>
             </div>
           </div>
@@ -234,7 +234,7 @@ export default function Landing() {
           </div>
           <div className="flex items-center gap-4">
             <a
-              href="#"
+              href="https://github.com/hanigharamah/payment-infra-playground"
               className="flex items-center gap-1.5 text-sm text-slate-700 hover:text-slate-900 transition-colors"
             >
               <Github size={14} />
@@ -242,7 +242,7 @@ export default function Landing() {
             </a>
             <span className="text-slate-300">·</span>
             <a
-              href="#"
+              href="https://linkedin.com/in/hanigharamah"
               className="flex items-center gap-1.5 text-sm text-slate-700 hover:text-slate-900 transition-colors"
             >
               <Linkedin size={14} />

@@ -180,7 +180,7 @@ export default function InputForm({ inputs, activePreset, onChange, onPreset }: 
 
         {(['mada', 'visa', 'wallet', 'cod'] as (keyof PaymentMethodMix)[]).map(key => {
           const labels: Record<keyof PaymentMethodMix, string> = {
-            mada: 'mada', visa: 'Visa / MC', wallet: 'STC Pay / Wallet', cod: 'COD',
+            mada: 'mada', visa: 'Visa / MC', wallet: 'Stored-value wallet', cod: 'COD',
           }
           return (
             <div key={key}>

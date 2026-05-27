@@ -28,7 +28,7 @@ export const FRAUD_PRESETS: FraudPreset[] = [
   {
     id: 'promo',
     label: 'Super-App Promo Abuse',
-    description: 'Careem/Uber promo abuse costs millions. Fraudsters create accounts with fake referrals and claim first-time discounts repeatedly. Prioritises recall (catching fraud) over precision.',
+    description: 'Super-app promo abuse costs millions. Fraudsters create accounts with fake referrals and claim first-time discounts repeatedly. Prioritises recall (catching fraud) over precision.',
     rules: [
       rule('r1', 'Multiple cards same device (>3/day)', 'transactions', 'device', 'day', '>', 3, 'flag'),
       rule('r2', 'High-volume device activity', 'transactions', 'device', 'hour', '>', 8, 'decline'),

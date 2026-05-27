@@ -12,6 +12,7 @@ interface Props {
 }
 
 const TYPE_LABELS: Record<string, string> = {
+  mada_domestic: 'mada',
   ticket_purchase: 'Ticket',
   food_delivery: 'Food',
   ride_payment: 'Ride',
@@ -160,6 +161,9 @@ export default function TransactionPanel({
                       )}
                     </span>
                   </div>
+                )}
+                {tx.declineReason && (
+                  <p className="mt-1.5 text-xs text-red-600">{tx.declineReason}</p>
                 )}
               </div>
             )

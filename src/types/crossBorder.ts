@@ -1,6 +1,6 @@
-export type CurrencyCode = 'SAR' | 'USD' | 'EUR' | 'AED' | 'CNY' | 'GBP' | 'PKR' | 'INR' | 'BDT'
+export type CurrencyCode = 'SAR' | 'USD' | 'EUR' | 'AED' | 'CNY' | 'GBP' | 'PKR' | 'INR' | 'BDT' | 'EGP' | 'JOD'
 export type CorridorPurpose = 'tourist' | 'remittance' | 'merchant_settlement' | 'b2b'
-export type PaymentMethodType = 'correspondent_banking' | 'stablecoin' | 'local_network'
+export type PaymentMethodType = 'correspondent_banking' | 'stablecoin' | 'local_network' | 'buna'
 
 export interface PaymentCorridor {
   sendCurrency: CurrencyCode

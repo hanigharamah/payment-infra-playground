@@ -7,6 +7,7 @@ export interface Gateway {
   percentageFee: number
   latency: number
   supportedCurrencies: string[]
+  supportedTransactionTypes: string[]
   enabled: boolean
 }
 
@@ -24,6 +25,7 @@ export interface RoutingRule {
     primaryGateway: string
     fallbackGateway?: string
   }
+  note?: string
   isDefault?: boolean
 }
 
@@ -37,6 +39,7 @@ export interface Transaction {
   outcome?: 'approved' | 'declined'
   matchedRule?: string
   fee?: number
+  declineReason?: string
 }
 
-export type ScenarioId = 'custom' | 'fifa' | 'careem' | 'ubereats'
+export type ScenarioId = 'custom' | 'mega_event' | 'super_app' | 'merchant_payouts'

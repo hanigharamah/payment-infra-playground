@@ -12,7 +12,7 @@ import type { SettlementInputs, PresetId } from '../types/settlement'
 
 export default function Settlement() {
   const [inputs, setInputs] = useState<SettlementInputs>(DEFAULT_INPUTS)
-  const [activePreset, setActivePreset] = useState<PresetId>('fifa-fnb')
+  const [activePreset, setActivePreset] = useState<PresetId>('megaevent-fnb')
 
   const result = useMemo(() => calculateSettlement(inputs), [inputs])
 
@@ -42,6 +42,7 @@ export default function Settlement() {
       `Payment mix: mada ${inputs.paymentMix.mada}% / Visa ${inputs.paymentMix.visa}% / Wallet ${inputs.paymentMix.wallet}% / COD ${inputs.paymentMix.cod}%`,
       `Settlement timing: ${inputs.settlementTiming}`,
       `Platform commission: ${inputs.platformCommission}%`,
+      'VAT: 15% modeled separately on taxable PSP/platform fees',
       '',
       '## Results',
       `Gross GMV: ${formatAmount(result.grossGMV, inputs.currency)}`,
@@ -56,6 +57,7 @@ export default function Settlement() {
       ),
       '',
       '* Assumes mada domestic transactions. Visa and Mastercard rates vary by card type (consumer vs. commercial).',
+      '* VAT is modeled on taxable processing/platform fees; merchant recoverability depends on VAT status.',
       '* Cross-border settlements add 1.5-3% FX spread depending on corridor.',
       '* Float cost assumes 5% annual cost of capital.',
     ]
@@ -88,7 +90,7 @@ export default function Settlement() {
               Merchant Settlement Calculator
             </h1>
             <p className="text-base text-slate-600 max-w-2xl">
-              At 8,000 operators on Careem NOW, one day of T+2 float is roughly SAR 4.2M held by the platform. Model T+0 vs. T+2, MDR waterfall, and per-transaction economics for any merchant category.
+              At 8,000 food delivery merchants, one day of T+2 float is roughly SAR 4.2M held by the platform. Model T+0 vs. T+2, MDR waterfall, and per-transaction economics for any merchant category.
             </p>
           </div>
           <button
@@ -134,7 +136,7 @@ export default function Settlement() {
 
             {/* Footnote */}
             <p className="text-xs text-slate-400 leading-relaxed border-t border-slate-200 pt-4">
-              * Assumes mada domestic transactions. Visa and Mastercard rates vary by card type (consumer vs. commercial). Cross-border settlements add 1.5-3% FX spread depending on corridor. mada interchange capped at SAR 2 per transaction. Instant payout premium of 0.5% applies when T+0 is selected.
+              * Fees include a separate 15% VAT estimate on taxable PSP/platform fees. VAT recoverability depends on merchant status. Assumes mada domestic transactions. Visa and Mastercard rates vary by card type. Cross-border settlements add 1.5-3% FX spread depending on corridor. mada e-commerce economics are modeled separately from international card rails. Instant payout premium of 0.5% applies when T+0 is selected.
             </p>
           </div>
         </div>

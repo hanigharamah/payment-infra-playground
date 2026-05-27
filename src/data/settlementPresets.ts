@@ -2,8 +2,8 @@ import type { SettlementPreset } from '../types/settlement'
 
 export const SETTLEMENT_PRESETS: SettlementPreset[] = [
   {
-    id: 'fifa-fnb',
-    label: 'FIFA F&B Vendor',
+    id: 'megaevent-fnb',
+    label: 'Mega-Event F&B Vendor',
     description: 'High-volume, low-ticket concession stand inside stadium. mada-heavy, instant payout required.',
     inputs: {
       dailyVolume: 2400,
@@ -16,9 +16,9 @@ export const SETTLEMENT_PRESETS: SettlementPreset[] = [
     },
   },
   {
-    id: 'careem-kitchen',
-    label: 'Careem NOW Cloud Kitchen',
-    description: '8,000 operators on Careem NOW platform. T+2 batch settlement, mixed payment methods.',
+    id: 'superapp-kitchen',
+    label: 'Super-App Cloud Kitchen',
+    description: '8,000 operators on a delivery platform. T+2 batch settlement, mixed payment methods.',
     inputs: {
       dailyVolume: 340,
       avgTicketSize: 65,
@@ -30,8 +30,8 @@ export const SETTLEMENT_PRESETS: SettlementPreset[] = [
     },
   },
   {
-    id: 'uber-driver',
-    label: 'Uber Driver Instant Payout',
+    id: 'driver-payout',
+    label: 'Driver Instant Payout',
     description: 'Per-trip earnings disbursement. T+0 required. Low ticket, extremely high volume.',
     inputs: {
       dailyVolume: 18,

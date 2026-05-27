@@ -16,6 +16,8 @@ const USD_VALUE: Record<CurrencyCode, number> = {
   PKR: 0.00359,
   INR: 0.012,
   BDT: 0.0085,
+  EGP: 0.0203,
+  JOD: 1.41,
 }
 
 const CURRENCY_NAMES: Record<CurrencyCode, string> = {
@@ -28,14 +30,17 @@ const CURRENCY_NAMES: Record<CurrencyCode, string> = {
   PKR: 'Pakistani Rupee',
   INR: 'Indian Rupee',
   BDT: 'Bangladeshi Taka',
+  EGP: 'Egyptian Pound',
+  JOD: 'Jordanian Dinar',
 }
 
 const PURPOSE_LABELS = {
   tourist: 'Tourist Payment',
-  remittance: 'Worker Remittance',
+  remittance: 'Wallet Remittance',
   merchant_settlement: 'Merchant Settlement',
   b2b: 'B2B Invoice',
 }
+const ARAB_CURRENCIES: CurrencyCode[] = ['SAR', 'AED', 'EGP', 'JOD']
 
 function toUsd(amount: number, currency: CurrencyCode) {
   return amount * USD_VALUE[currency]
@@ -102,6 +107,24 @@ function buildFees(corridor: PaymentCorridor, amountUsd: number, type: PaymentMe
     }
   }
 
+  if (type === 'buna') {
+    const rateByPurpose = {
+      tourist: 0.009,
+      remittance: 0.007,
+      merchant_settlement: 0.005,
+      b2b: 0.006,
+    }
+    const total = amountUsd * rateByPurpose[corridor.purpose]
+    return {
+      sendingFee: total * 0.35,
+      intermediaryFees: [total * 0.3],
+      receivingFee: total * 0.35,
+      fxSpread: rateByPurpose[corridor.purpose] * 20,
+      total,
+      totalPct: amountUsd > 0 ? (total / amountUsd) * 100 : 0,
+    }
+  }
+
   const networkFee = 2
   const fxFee = amountUsd * 0.003
   const total = networkFee + fxFee
@@ -151,11 +174,15 @@ function methodConfig(type: PaymentMethodType, corridor: PaymentCorridor): Omit<
   }
 
   if (type === 'stablecoin') {
+    const isSarCorridor = corridor.sendCurrency === 'SAR' || corridor.receiveCurrency === 'SAR'
     return {
       name: 'Stablecoin Rails',
       type,
       description: 'On-ramp, USDC transfer, off-ramp into recipient currency',
-      available: true,
+      available: !isSarCorridor,
+      unavailableReason: isSarCorridor
+        ? 'Not modeled as an available licensed payment rail for SAR corridors'
+        : undefined,
       timeline: corridor.purpose === 'remittance' ? '30 minutes - 2 hours' : '15 minutes - 2 hours',
       timelineMinutes: corridor.purpose === 'remittance' ? 30 : 60,
       flowSteps: [
@@ -173,17 +200,48 @@ function methodConfig(type: PaymentMethodType, corridor: PaymentCorridor): Omit<
       ],
       bestFor: 'Fast remittances, 24/7 transfers',
       transparency: 'High',
-      availability: '24/7',
+      availability: isSarCorridor ? 'Unavailable for SAR corridor' : '24/7',
       risk: 'Medium',
       limits: 'Usually capped by ramps',
     }
   }
 
+  if (type === 'buna') {
+    const available = ARAB_CURRENCIES.includes(corridor.sendCurrency) && ARAB_CURRENCIES.includes(corridor.receiveCurrency)
+    return {
+      name: 'Buna Network',
+      type,
+      description: 'Arab Monetary Fund cross-border payment platform',
+      available,
+      unavailableReason: 'Modeled only for Arab-currency corridors (SAR, AED, EGP, JOD)',
+      timeline: available ? 'Same business day' : 'Not available',
+      timelineMinutes: available ? 720 : Number.POSITIVE_INFINITY,
+      flowSteps: available
+        ? ['Participant bank', 'Buna network screening', 'Central bank settlement']
+        : ['Corridor not in Buna model', 'Fallback to correspondent or regulated local rails'],
+      regulatorySteps: available
+        ? [
+            { label: 'Account verification', description: 'Participating institution verifies sender and beneficiary' },
+            { label: 'Network screening', description: 'Buna compliance and sanctions controls run before release' },
+            { label: 'Central bank settlement', description: 'Funds settle through participating monetary authorities' },
+          ]
+        : [
+            { label: 'Corridor check', description: 'Both currencies must be in the modeled Buna set' },
+            { label: 'Fallback required', description: 'Route through correspondent or regional rail alternatives' },
+          ],
+      bestFor: 'Arab-currency regional transfers',
+      transparency: available ? 'Medium' : 'N/A',
+      availability: available ? 'Business-day processing' : 'Unavailable',
+      risk: available ? 'Low' : 'N/A',
+      limits: available ? 'Institution-defined limits' : 'N/A',
+    }
+  }
+
   const available = isGccLocal(corridor)
   return {
-    name: 'Regional Network',
+    name: 'AFAQ / GCC RTGS',
     type,
-    description: 'Local or GCC payment network between participating banks',
+    description: 'GCC cross-border RTGS flow for SAR <-> AED participating banks',
     available,
     unavailableReason: 'Only available for SAR <-> AED corridors in this model',
     timeline: available ? 'Real-time' : 'Not available',
@@ -223,7 +281,7 @@ function buildMethod(type: PaymentMethodType, corridor: PaymentCorridor): Paymen
 }
 
 export function compareCrossBorder(corridor: PaymentCorridor): CrossBorderComparison {
-  const methods = (['correspondent_banking', 'stablecoin', 'local_network'] as PaymentMethodType[])
+  const methods = (['correspondent_banking', 'stablecoin', 'local_network', 'buna'] as PaymentMethodType[])
     .map((type) => buildMethod(type, corridor))
 
   const bestValue = methods

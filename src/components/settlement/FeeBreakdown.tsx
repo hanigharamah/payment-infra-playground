@@ -12,8 +12,10 @@ interface Props {
 // Maps our Tailwind bg class to a hex for Recharts
 const COLOR_MAP: Record<string, string> = {
   'bg-slate-700': '#334155',
+  'bg-slate-600': '#475569',
   'bg-slate-500': '#64748b',
   'bg-slate-400': '#94a3b8',
+  'bg-slate-300': '#cbd5e1',
   'bg-blue-400': '#60a5fa',
   'bg-amber-400': '#fbbf24',
   'bg-emerald-400': '#34d399',

@@ -19,8 +19,8 @@ import type {
 
 const SECTION_LABEL = 'text-xs font-semibold uppercase tracking-wider text-slate-500'
 
-const SEND_CURRENCIES: CurrencyCode[] = ['SAR', 'USD', 'EUR', 'AED', 'CNY', 'GBP', 'INR']
-const RECEIVE_CURRENCIES: CurrencyCode[] = ['PKR', 'SAR', 'USD', 'EUR', 'GBP', 'AED', 'INR', 'BDT']
+const SEND_CURRENCIES: CurrencyCode[] = ['SAR', 'USD', 'EUR', 'AED', 'CNY', 'GBP', 'INR', 'EGP', 'JOD']
+const RECEIVE_CURRENCIES: CurrencyCode[] = ['PKR', 'SAR', 'USD', 'EUR', 'GBP', 'AED', 'INR', 'BDT', 'EGP', 'JOD']
 const PURPOSES: PaymentCorridor['purpose'][] = ['tourist', 'remittance', 'merchant_settlement', 'b2b']
 
 export default function CrossBorder() {
@@ -58,7 +58,7 @@ export default function CrossBorder() {
             Cross-Border Payment Visualizer
           </h1>
           <p className="text-base text-slate-600 max-w-2xl">
-            Compare correspondent banking, stablecoin rails, and regional payment networks for the same international payment corridor.
+            Compare correspondent banking, stablecoin rails, AFAQ-style GCC routing, and Buna network flows for the same international payment corridor.
           </p>
         </div>
 
@@ -163,7 +163,7 @@ export default function CrossBorder() {
         </section>
 
         <p className="text-xs text-slate-400 mt-6 leading-relaxed border-t border-slate-200 pt-4">
-          * FX rates and fees are hardcoded planning assumptions for simulation. Stablecoin rails require regulated on-ramp and off-ramp partners; availability and licensing vary by jurisdiction.
+          * Exchange rates are illustrative and fixed for modeling. SAR/USD reflects the official peg (3.75). Other rates are approximate. Stablecoin rails require regulated on-ramp and off-ramp partners; availability and licensing vary by jurisdiction.
         </p>
       </div>
     </div>
@@ -264,6 +264,21 @@ function CostBreakdown({ method }: { method: PaymentMethod }) {
       rows={[
         ['Network fee', formatUsd(method.fees.sendingFee)],
         ['FX and spread estimate', `${method.fees.fxSpread.toFixed(1)}%`],
+        ]}
+        total={method.fees.total}
+        totalPct={method.fees.totalPct}
+      />
+    )
+  }
+
+  if (method.type === 'buna') {
+    return (
+      <CostBlock
+        rows={[
+          ['Participant bank fee', formatUsd(method.fees.sendingFee)],
+          ['Buna processing fee', formatUsd(method.fees.intermediaryFees.reduce((sum, fee) => sum + fee, 0))],
+          ['Receiving bank fee', formatUsd(method.fees.receivingFee)],
+          ['FX and spread estimate', `${method.fees.fxSpread.toFixed(1)}%`],
         ]}
         total={method.fees.total}
         totalPct={method.fees.totalPct}

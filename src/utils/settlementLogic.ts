@@ -2,6 +2,8 @@ import type {
   SettlementInputs, SettlementResult, FeeLineItem, MerchantCategory,
 } from '../types/settlement'
 
+const VAT_RATE = 0.15
+
 // ── Interchange rates ──────────────────────────────────────────────────────
 function interchangeFee(inputs: SettlementInputs): number {
   const gross = inputs.dailyVolume * inputs.avgTicketSize
@@ -14,7 +16,8 @@ function interchangeFee(inputs: SettlementInputs): number {
     ? inputs.dailyVolume * (inputs.paymentMix.mada / 100) * Math.min(inputs.avgTicketSize * 0.0075, 2)
     : 0
 
-  const visaFee = visaVol * 0.0195
+  // Standard domestic Visa interchange, Saudi Arabia (MCC-dependent)
+  const visaFee = visaVol * 0.016
   const walletFee = walletVol * 0.015
 
   return madaFee + visaFee + walletFee
@@ -87,8 +90,10 @@ export function calculateSettlement(inputs: SettlementInputs): SettlementResult 
   const gateway = gatewayFee(inputs)
   const instant = instantPremium(inputs)
   const platform = platformFee(inputs)
+  const taxableFees = scheme + acquirer + gateway + instant + platform
+  const vat = taxableFees * VAT_RATE
 
-  const totalFees = interchange + scheme + acquirer + gateway + instant + platform
+  const totalFees = interchange + scheme + acquirer + gateway + instant + platform + vat
   const netPayout = grossGMV - totalFees
   const effectiveRate = grossGMV > 0 ? (totalFees / grossGMV) * 100 : 0
   const float = floatCost(inputs, grossGMV)
@@ -97,9 +102,10 @@ export function calculateSettlement(inputs: SettlementInputs): SettlementResult 
     { label: 'Interchange', amount: interchange, pct: grossGMV > 0 ? (interchange / grossGMV) * 100 : 0, color: 'bg-slate-700' },
     { label: 'Scheme fees', amount: scheme, pct: grossGMV > 0 ? (scheme / grossGMV) * 100 : 0, color: 'bg-slate-500' },
     { label: 'Acquirer margin', amount: acquirer, pct: grossGMV > 0 ? (acquirer / grossGMV) * 100 : 0, color: 'bg-slate-400' },
-    { label: 'Gateway', amount: gateway, pct: grossGMV > 0 ? (gateway / grossGMV) * 100 : 0, color: 'bg-blue-400' },
+    { label: 'Gateway', amount: gateway, pct: grossGMV > 0 ? (gateway / grossGMV) * 100 : 0, color: 'bg-slate-300' },
     ...(instant > 0 ? [{ label: 'Instant payout premium', amount: instant, pct: grossGMV > 0 ? (instant / grossGMV) * 100 : 0, color: 'bg-amber-400' }] : []),
     { label: 'Platform commission', amount: platform, pct: grossGMV > 0 ? (platform / grossGMV) * 100 : 0, color: 'bg-emerald-400' },
+    { label: 'VAT on taxable fees', amount: vat, pct: grossGMV > 0 ? (vat / grossGMV) * 100 : 0, color: 'bg-slate-600' },
   ].filter(item => item.amount > 0)
 
   return {

@@ -11,7 +11,7 @@ The app is built as a portfolio-grade internal tooling artifact: it is not a con
 Routes synthetic transactions across Checkout.com, HyperPay MENA, and Moyasar.
 
 - Configure gateway availability and success rates.
-- Load preset scenarios for FIFA ticketing, Careem Pay, and merchant payouts.
+- Load preset scenarios for mega-event ticketing, super-app wallet, and merchant payouts.
 - Build priority routing rules by currency, amount, and transaction type.
 - Generate and process transaction batches.
 - Compare approvals, declines, fallback usage, fees, and gateway distribution.
@@ -20,7 +20,7 @@ Routes synthetic transactions across Checkout.com, HyperPay MENA, and Moyasar.
 
 Models merchant payout economics across payment method mix and settlement timing.
 
-- Presets for FIFA F&B vendors, Careem NOW cloud kitchens, and driver instant payouts.
+- Presets for mega-event F&B vendors, food delivery platform cloud kitchens, and driver instant payouts.
 - Calculates gross GMV, interchange, scheme fees, acquirer margin, gateway fees, instant payout premium, platform commission, net payout, and float cost.
 - Exports a plain-text settlement report.
 
@@ -129,7 +129,7 @@ Before shipping changes:
 
 **The business problem**
 
-Merchants in Saudi Arabia using a single payment gateway face two issues. Every 1% drop in authorization rate on SAR 10M/month volume costs around SAR 100K in lost revenue. And they overpay on fees for transactions where a cheaper gateway would work just as well. Mid-to-large merchants solve this with payment orchestration platforms like Payrails (which Careem uses) or Spreedly. This tool demonstrates the routing logic those platforms run internally.
+Merchants in Saudi Arabia using a single payment gateway face two issues. Every 1% drop in authorization rate on SAR 10M/month volume costs around SAR 100K in lost revenue. And they overpay on fees for transactions where a cheaper gateway would work just as well. Mid-to-large merchants solve this with payment orchestration platforms like Payrails (which ride-hailing platform uses) or Spreedly. This tool demonstrates the routing logic those platforms run internally.
 
 **Critical thinking moment**
 
@@ -157,11 +157,11 @@ I'd add cost-vs-success-rate tension. Right now routing optimizes one variable a
 
 **The business problem**
 
-Marketplace platforms like Careem NOW, Uber Eats, HungerStation, and Jahez take a percentage of every transaction. Payment processors take another percentage on top. For a cloud kitchen doing SAR 7,500/day in orders, the difference between a 20% effective take rate and a 22% take rate is SAR 5,500/month. That's life or death for thin-margin restaurants. This calculator shows where the money actually goes between gross revenue and net merchant payout.
+Marketplace platforms like food delivery platform, food delivery platform, HungerStation, and Jahez take a percentage of every transaction. Payment processors take another percentage on top. For a cloud kitchen doing SAR 7,500/day in orders, the difference between a 20% effective take rate and a 22% take rate is SAR 5,500/month. That's life or death for thin-margin restaurants. This calculator shows where the money actually goes between gross revenue and net merchant payout.
 
 **Critical thinking moment**
 
-When I was researching mega-event payment infrastructure for the emagine Riyadh role, I was about to build the calculator with generic merchant categories. Then I realized real merchant economics depend heavily on payment method mix, not just category. A cloud kitchen with 90% mada cards has very different unit economics than one with 30% cash on delivery. I rebuilt the calculator with payment method mix as a first-class input. That's how Careem and Stripe Capital actually model merchant cash flow.
+When I was researching mega-event payment infrastructure for the emagine Riyadh role, I was about to build the calculator with generic merchant categories. Then I realized real merchant economics depend heavily on payment method mix, not just category. A cloud kitchen with 90% mada cards has very different unit economics than one with 30% cash on delivery. I rebuilt the calculator with payment method mix as a first-class input. That's how ride-hailing platform and Stripe Capital actually model merchant cash flow.
 
 **Trade-off I made**
 
@@ -169,11 +169,11 @@ I thought about modeling settlement complexity more accurately. Chargebacks, hol
 
 **Decision I'd defend**
 
-I included Careem NOW (18% commission) and Uber driver (25%) as presets even though they're "competitor" platforms in some sense. Someone might argue I should make them generic. My defense: marketplace economics are real and recognizable. Showing them with actual platform numbers proves I've thought about real businesses, not toy examples. A Careem Pay PM would immediately recognize the math.
+I included food delivery platform (18% commission) and driver (25%) as presets even though they're "competitor" platforms in some sense. Someone might argue I should make them generic. My defense: marketplace economics are real and recognizable. Showing them with actual platform numbers proves I've thought about real businesses, not toy examples. A super-app wallet PM would immediately recognize the math.
 
 **Honest limitation**
 
-The instant settlement premium is modeled as a flat 0.5% on T+0. In reality, instant payout pricing is often dynamic. Uber charges drivers up to 1.5% for instant cash-out, with different rates by region and rider tier. I oversimplified to keep the model legible, but this understates how lucrative instant payouts actually are for platforms. It's a major revenue stream.
+The instant settlement premium is modeled as a flat 0.5% on T+0. In reality, instant payout pricing is often dynamic. ride-hailing platform charges drivers up to 1.5% for instant cash-out, with different rates by region and rider tier. I oversimplified to keep the model legible, but this understates how lucrative instant payouts actually are for platforms. It's a major revenue stream.
 
 **Next step**
 
@@ -213,7 +213,7 @@ I'd add a "what gets missed" view showing the false negatives in detail. Right n
 
 **The business problem**
 
-Saudi Arabia has around 13.5M expatriates, mostly remitting to South Asia. The remittance market is SAR 150B+ annually. Traditional correspondent banking takes 2-5 days and charges 8-10% in fees. Careem Pay, Tabby, and STC Pay are competing for this market by offering faster, cheaper alternatives. This tool shows the three main rails (correspondent banking, stablecoin, and local networks) side by side, so a PM can see where the competitive opportunity actually is.
+Saudi Arabia has around 13.5M expatriates, mostly remitting to South Asia. The remittance market is SAR 150B+ annually. Traditional correspondent banking takes 2-5 days and charges 8-10% in fees. super-app wallet, super-app wallet, and super-app wallet are competing for this market by offering faster, cheaper alternatives. This tool shows the three main rails (correspondent banking, stablecoin, and local networks) side by side, so a PM can see where the competitive opportunity actually is.
 
 **Critical thinking moment**
 
@@ -241,11 +241,11 @@ I'd add liquidity and FX risk, which are the hidden costs that aren't on the rec
 
 **The business problem**
 
-Closed-loop wallets like Careem Pay, STC Pay, and Hala are infrastructure-heavy products. The customer sees a balance and a send button. Behind that, payment operations teams spend their day monitoring ledger integrity, reconciling customer float against bank accounts, managing KYC tiers, approving high-value transactions, and optimizing cost of acceptance. This dashboard simulates what those teams actually see. The back-office reality of running a wallet at scale.
+Closed-loop wallets like super-app wallet, super-app wallet, and Hala are infrastructure-heavy products. The customer sees a balance and a send button. Behind that, payment operations teams spend their day monitoring ledger integrity, reconciling customer float against bank accounts, managing KYC tiers, approving high-value transactions, and optimizing cost of acceptance. This dashboard simulates what those teams actually see. The back-office reality of running a wallet at scale.
 
 **Critical thinking moment**
 
-I started by conflating two different things. Payment wallets like Apple Pay and mada Pay, and stored-value wallets like Careem Pay and STC Pay. When I researched what wallet PMs actually do, I realized these are different product categories with different infrastructure underneath. I rebuilt the simulator focused specifically on closed-loop stored-value wallets, because that's where the Careem Pay / STC Pay / Tabby infrastructure PM roles actually exist. The Apple Pay angle is interesting but it's not where this category of PM works.
+I started by conflating two different things. Payment wallets like Apple Pay and mada Pay, and stored-value wallets like super-app wallet and super-app wallet. When I researched what wallet PMs actually do, I realized these are different product categories with different infrastructure underneath. I rebuilt the simulator focused specifically on closed-loop stored-value wallets, because that's where the super-app wallet / super-app wallet / super-app wallet infrastructure PM roles actually exist. The Apple Pay angle is interesting but it's not where this category of PM works.
 
 I also pushed back when the scope was creeping toward "add a transit ticketing simulator" because Saudi Metro uses open-loop EMV payments. The reasoning sounded good. Apple Pay express transit is real infrastructure. But mega-events don't use that flow. Tickets are pre-purchased. Catching that misalignment before building saved a week of work on something that wouldn't have strengthened the portfolio.
 
@@ -259,7 +259,7 @@ I included a "ledger vs. bank" reconciliation view with an "Inject Test Variance
 
 **Honest limitation**
 
-The "Simulate Day" function generates around 100 transactions, which is unrealistic for actual wallet scale. Careem Pay processes hundreds of thousands of transactions daily. STC Pay processes millions. The simulator is a visualization of mechanics, not a stress test of infrastructure. A real wallet ops dashboard would need to handle millions of events per minute, which is an engineering problem I haven't addressed.
+The "Simulate Day" function generates around 100 transactions, which is unrealistic for actual wallet scale. super-app wallet processes hundreds of thousands of transactions daily. super-app wallet processes millions. The simulator is a visualization of mechanics, not a stress test of infrastructure. A real wallet ops dashboard would need to handle millions of events per minute, which is an engineering problem I haven't addressed.
 
 **Next step**
 

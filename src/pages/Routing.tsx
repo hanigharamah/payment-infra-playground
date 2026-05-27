@@ -12,9 +12,9 @@ import { processTransaction, generateTransactions } from '../utils/routingLogic'
 
 const SCENARIO_OPTIONS = [
   { value: 'custom', label: 'Custom — configure from scratch' },
-  { value: 'fifa', label: 'FIFA 2034 Ticketing' },
-  { value: 'careem', label: 'Careem Pay Multi-Vertical' },
-  { value: 'ubereats', label: 'Uber Eats Merchant Payouts' },
+  { value: 'mega_event', label: 'Mega-Event Ticketing' },
+  { value: 'super_app', label: 'Super-App Multi-Vertical' },
+  { value: 'merchant_payouts', label: 'Merchant Payouts' },
 ]
 
 export default function Routing() {
@@ -83,7 +83,7 @@ export default function Routing() {
               Payment Routing Simulator
             </h1>
             <p className="text-base text-slate-600">
-              Route transactions across Checkout.com, HyperPay MENA, and Moyasar using priority rules. Build the logic, generate 50 transactions, see where the money goes and what it costs.
+              Route transactions across Checkout.com, HyperPay MENA, and Moyasar using priority rules. Build the logic, generate 50 transactions, and compare approval outcomes against fee impact.
             </p>
           </div>
 

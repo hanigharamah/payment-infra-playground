@@ -110,7 +110,7 @@ export default function Fraud() {
 
         {/* Footnote */}
         <p className="text-xs text-slate-400 leading-relaxed border-t border-slate-200 pt-4">
-          * During the 2022 Qatar World Cup, secondary market ticket fraud peaked at 12,000 bot-driven purchases per hour. The detection window was 90 seconds. Transaction dataset is synthetically generated — fraud patterns are deterministic, timestamps are randomised within each run. Precision-recall trade-offs are real: a rule too aggressive kills legitimate group bookings.
+          * During a major international sporting event, secondary market ticket fraud peaked at 12,000 bot-driven purchases per hour. The detection window was 90 seconds. Transaction dataset is synthetically generated — fraud patterns are deterministic, timestamps are randomised within each run. Precision-recall trade-offs are real: a rule too aggressive kills legitimate group bookings.
         </p>
       </div>
     </div>

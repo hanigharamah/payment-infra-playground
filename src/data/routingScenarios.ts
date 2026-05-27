@@ -10,6 +10,7 @@ export const DEFAULT_GATEWAYS: Gateway[] = [
     percentageFee: 2.87,
     latency: 182,
     supportedCurrencies: ['USD', 'EUR', 'SAR', 'AED', 'PKR', 'CNY'],
+    supportedTransactionTypes: ['ticket_purchase', 'food_delivery', 'ride_payment', 'retail', 'p2p_transfer', 'instant_payout', 'standard_payout'],
     enabled: true,
   },
   {
@@ -21,6 +22,7 @@ export const DEFAULT_GATEWAYS: Gateway[] = [
     percentageFee: 2.23,
     latency: 387,
     supportedCurrencies: ['SAR', 'AED', 'PKR'],
+    supportedTransactionTypes: ['mada_domestic', 'ticket_purchase', 'food_delivery', 'ride_payment', 'retail', 'instant_payout', 'standard_payout'],
     enabled: true,
   },
   {
@@ -32,6 +34,7 @@ export const DEFAULT_GATEWAYS: Gateway[] = [
     percentageFee: 1.91,
     latency: 583,
     supportedCurrencies: ['USD', 'EUR', 'SAR'],
+    supportedTransactionTypes: ['ticket_purchase', 'food_delivery', 'ride_payment', 'retail', 'standard_payout'],
     enabled: true,
   },
 ]
@@ -56,25 +59,31 @@ export interface ScenarioConfig {
 }
 
 export const SCENARIOS: Record<Exclude<ScenarioId, 'custom'>, ScenarioConfig> = {
-  fifa: {
-    id: 'fifa',
-    label: 'FIFA 2034 Ticketing',
+  mega_event: {
+    id: 'mega_event',
+    label: 'Mega-Event Ticketing',
     description:
-      '3.4M ticket transactions in 90 days. Low-value SAR to Moyasar (cheap), high-value EUR to Checkout.com (reliable), CNY always to Checkout.com (compliance).',
-    txnPrefix: 'FIFA',
+      '3.4M ticket transactions in 90 days. Domestic mada routes through local acquiring; high-value EUR routes to Checkout.com; CNY routes to Checkout.com for international coverage.',
+    txnPrefix: 'EVNT',
     rules: [
       {
-        id: 'fifa-1',
+        id: 'event-1',
+        condition: { transactionType: 'mada_domestic' },
+        action: { primaryGateway: 'gw-b' },
+        note: 'mada is modeled as domestic Saudi processing and cannot route to international acquirers.',
+      },
+      {
+        id: 'event-2',
         condition: { currency: 'SAR', amountOperator: '<', amount: 50 },
         action: { primaryGateway: 'gw-c' },
       },
       {
-        id: 'fifa-2',
+        id: 'event-3',
         condition: { currency: 'EUR', amountOperator: '>', amount: 100 },
         action: { primaryGateway: 'gw-a' },
       },
       {
-        id: 'fifa-3',
+        id: 'event-4',
         condition: { currency: 'CNY' },
         action: { primaryGateway: 'gw-a' },
       },
@@ -88,31 +97,32 @@ export const SCENARIOS: Record<Exclude<ScenarioId, 'custom'>, ScenarioConfig> = 
         { currency: 'AED', weight: 3 },
       ],
       types: [
-        { type: 'ticket_purchase', weight: 80 },
+        { type: 'mada_domestic', weight: 45 },
+        { type: 'ticket_purchase', weight: 35 },
         { type: 'retail', weight: 20 },
       ],
       amountRange: [15, 500],
     },
   },
-  careem: {
-    id: 'careem',
-    label: 'Careem Pay Multi-Vertical',
+  super_app: {
+    id: 'super_app',
+    label: 'Super-App Multi-Vertical',
     description:
-      'One platform, 14 verticals, three settlement cycles. Rides to HyperPay (fast settlement), food to Moyasar (low cost), P2P to Checkout.com (compliance).',
-    txnPrefix: 'CARM',
+      'One platform, multiple verticals, three settlement cycles. Rides route to HyperPay, food to Moyasar, P2P to Checkout.com for compliance controls.',
+    txnPrefix: 'SAPP',
     rules: [
       {
-        id: 'careem-1',
+        id: 'super-1',
         condition: { transactionType: 'ride_payment' },
         action: { primaryGateway: 'gw-b' },
       },
       {
-        id: 'careem-2',
+        id: 'super-2',
         condition: { transactionType: 'food_delivery' },
         action: { primaryGateway: 'gw-c' },
       },
       {
-        id: 'careem-3',
+        id: 'super-3',
         condition: { transactionType: 'p2p_transfer' },
         action: { primaryGateway: 'gw-a' },
       },
@@ -131,12 +141,12 @@ export const SCENARIOS: Record<Exclude<ScenarioId, 'custom'>, ScenarioConfig> = 
       amountRange: [5, 150],
     },
   },
-  ubereats: {
-    id: 'ubereats',
-    label: 'Uber Eats Merchant Payouts',
+  merchant_payouts: {
+    id: 'merchant_payouts',
+    label: 'Merchant Payouts',
     description:
-      '8,000 cloud kitchen operators want same-day payouts. Instant via Checkout.com (costly but fast), standard batch via Moyasar (cheap, T+2).',
-    txnPrefix: 'UBER',
+      '8,000 cloud kitchen operators want same-day payouts. Instant routes via Checkout.com; standard batch routes via Moyasar.',
+    txnPrefix: 'PYOT',
     rules: [
       {
         id: 'ue-1',
@@ -167,6 +177,7 @@ export const SCENARIOS: Record<Exclude<ScenarioId, 'custom'>, ScenarioConfig> = 
 export const ALL_CURRENCIES = ['SAR', 'USD', 'EUR', 'AED', 'PKR', 'CNY']
 
 export const ALL_TRANSACTION_TYPES = [
+  'mada_domestic',
   'ticket_purchase',
   'food_delivery',
   'ride_payment',
