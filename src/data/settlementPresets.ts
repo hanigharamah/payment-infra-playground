@@ -30,9 +30,9 @@ export const SETTLEMENT_PRESETS: SettlementPreset[] = [
     },
   },
   {
-    id: 'driver-payout',
-    label: 'Driver Instant Payout',
-    description: 'Per-trip earnings disbursement. T+0 required. Low ticket, extremely high volume.',
+    id: 'driver-earnings',
+    label: 'Driver Earnings Acceptance',
+    description: 'Driver as micro-merchant: accepting per-trip fare payments into a wallet. T+0 settlement required. Low average ticket, high daily transaction count.',
     inputs: {
       dailyVolume: 18,
       avgTicketSize: 22,

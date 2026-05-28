@@ -37,7 +37,7 @@ export interface SettlementResult {
   floatCost: number       // opportunity cost of T+1/T+2 vs T+0
 }
 
-export type PresetId = 'custom' | 'megaevent-fnb' | 'superapp-kitchen' | 'driver-payout'
+export type PresetId = 'custom' | 'megaevent-fnb' | 'superapp-kitchen' | 'driver-earnings'
 
 export interface SettlementPreset {
   id: PresetId

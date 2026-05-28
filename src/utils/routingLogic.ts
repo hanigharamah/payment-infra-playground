@@ -127,7 +127,7 @@ const DEFAULT_CURRENCIES = [
 const DEFAULT_TYPES = [
   { value: 'mada_domestic', weight: 15 },
   { value: 'ticket_purchase', weight: 20 }, { value: 'food_delivery', weight: 20 },
-  { value: 'ride_payment', weight: 20 },    { value: 'retail', weight: 20 },
+  { value: 'ride_payment', weight: 15 },    { value: 'retail', weight: 15 },
   { value: 'p2p_transfer', weight: 15 },
 ]
 

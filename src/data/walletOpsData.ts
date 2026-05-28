@@ -5,7 +5,7 @@ import type {
 // ── Users ─────────────────────────────────────────────────────────────────
 export const INITIAL_USERS: WalletUser[] = [
   { id: 'hani_g',    name: 'Hani Gharamah',        shortName: 'Hani G',     type: 'customer', kycTier: 2, balance: 1250.00,  monthlyVolume: 3420.00,  monthlyLimit: 20000, joinedMonthsAgo: 8,  avatarInitials: 'HG' },
-  { id: 'sara_o',    name: 'Sara Al-Otaibi',        shortName: 'Sara A',     type: 'customer', kycTier: 1, balance: 320.00,   monthlyVolume: 4850.00,  monthlyLimit: 5000,  joinedMonthsAgo: 0,  avatarInitials: 'SO' },
+  { id: 'sara_o',    name: 'Sara Al-Otaibi',        shortName: 'Sara A',     type: 'customer', kycTier: 1, balance: 320.00,   monthlyVolume: 18500.00, monthlyLimit: 20000, joinedMonthsAgo: 0,  avatarInitials: 'SO' },
   { id: 'ahmed_k',   name: 'Ahmed Khan',            shortName: 'Ahmed K',    type: 'customer', kycTier: 2, balance: 4580.00,  monthlyVolume: 8200.00,  monthlyLimit: 20000, joinedMonthsAgo: 14, avatarInitials: 'AK' },
   { id: 'muhammad_i',name: 'Muhammad Iqbal',        shortName: 'Muhammad I', type: 'driver',   kycTier: 2, balance: 0.00,     monthlyVolume: 12400.00, monthlyLimit: 20000, joinedMonthsAgo: 11, avatarInitials: 'MI' },
   { id: 'hassan_a',  name: 'Hassan Ali',            shortName: 'Hassan A',   type: 'driver',   kycTier: 2, balance: 2340.00,  monthlyVolume: 6800.00,  monthlyLimit: 20000, joinedMonthsAgo: 7,  avatarInitials: 'HA' },

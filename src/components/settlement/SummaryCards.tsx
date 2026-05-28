@@ -18,6 +18,7 @@ export default function SummaryCards({ result, currency }: Props) {
         label="Total fees"
         value={formatAmount(result.totalFees, currency)}
         sub={`${result.effectiveRate.toFixed(2)}% effective rate`}
+        note="Includes platform commission, VAT, and all processing fees"
         color="red"
       />
       <MetricCard
@@ -31,11 +32,12 @@ export default function SummaryCards({ result, currency }: Props) {
 }
 
 function MetricCard({
-  label, value, sub, color,
+  label, value, sub, note, color,
 }: {
   label: string
   value: string
   sub: string
+  note?: string
   color?: 'emerald' | 'red'
 }) {
   const valueClass =
@@ -48,6 +50,7 @@ function MetricCard({
       <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">{label}</p>
       <p className={`text-xl font-bold tabular-nums leading-tight ${valueClass}`}>{value}</p>
       <p className="text-xs text-slate-400 mt-1 leading-snug">{sub}</p>
+      {note && <p className="text-xs text-slate-400 mt-0.5 leading-snug">{note}</p>}
     </div>
   )
 }

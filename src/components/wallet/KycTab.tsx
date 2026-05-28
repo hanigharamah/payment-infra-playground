@@ -1,6 +1,6 @@
 import { AlertTriangle, CheckCircle, XCircle } from 'lucide-react'
 import type { WalletUser, BlockedTx } from '../../types/walletOps'
-import { formatSAR, formatSARCompact, formatRelative, TIER_LIMITS } from '../../utils/walletOpsLogic'
+import { formatSAR, formatSARCompact, formatRelative, TIER_MONTHLY_LIMITS } from '../../utils/walletOpsLogic'
 
 interface Props {
   users: WalletUser[]
@@ -8,9 +8,9 @@ interface Props {
 }
 
 const TIER_INFO = {
-  1: { label: 'Tier 1 — Basic', limit: TIER_LIMITS[1], color: 'text-amber-700 bg-amber-50', desc: 'ID + selfie verified. SAR 5,000/month.' },
-  2: { label: 'Tier 2 — Verified', limit: TIER_LIMITS[2], color: 'text-slate-700 bg-slate-100', desc: 'Full KYC. SAR 20,000/month.' },
-  3: { label: 'Tier 3 — Enhanced', limit: TIER_LIMITS[3], color: 'text-emerald-700 bg-emerald-50', desc: 'Business / high-value. SAR 200,000/month.' },
+  1: { label: 'Tier 1 — Basic', limit: TIER_MONTHLY_LIMITS[1], color: 'text-amber-700 bg-amber-50', desc: 'ID + selfie verified. SAR 20,000/month throughput.' },
+  2: { label: 'Tier 2 — Verified', limit: TIER_MONTHLY_LIMITS[2], color: 'text-slate-700 bg-slate-100', desc: 'Full KYC. SAR 60,000/month throughput.' },
+  3: { label: 'Tier 3 — Enhanced', limit: TIER_MONTHLY_LIMITS[3], color: 'text-emerald-700 bg-emerald-50', desc: 'Business / high-value. SAR 500,000/month throughput.' },
 }
 
 export default function KycTab({ users, blockedTxs }: Props) {
@@ -19,7 +19,7 @@ export default function KycTab({ users, blockedTxs }: Props) {
   const tier3 = users.filter(u => u.kycTier === 3)
 
   const nearLimit = users.filter(u => {
-    const limit = TIER_LIMITS[u.kycTier]
+    const limit = TIER_MONTHLY_LIMITS[u.kycTier]
     return (u.monthlyVolume / limit) > 0.85
   })
 
@@ -82,7 +82,7 @@ export default function KycTab({ users, blockedTxs }: Props) {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {users.map(user => {
-                const limit = TIER_LIMITS[user.kycTier]
+                const limit = TIER_MONTHLY_LIMITS[user.kycTier]
                 const utilizationPct = Math.min(100, (user.monthlyVolume / limit) * 100)
                 const remaining = Math.max(0, limit - user.monthlyVolume)
                 const isNear = utilizationPct > 85

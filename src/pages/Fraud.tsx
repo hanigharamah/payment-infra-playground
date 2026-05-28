@@ -76,7 +76,7 @@ export default function Fraud() {
             Fraud Detection Playground
           </h1>
           <p className="text-base text-slate-600 max-w-2xl">
-            Write velocity rules — flag anyone buying 5+ tickets in an hour, block cards used across 5 devices in a day — then test them against 100 generated transactions and watch precision and recall update in real time.
+            Write velocity rules — flag anyone buying 5+ tickets in an hour, block cards used across 5 devices in a day — then test them against ~100 generated transactions and watch precision and recall update in real time.
           </p>
         </div>
 

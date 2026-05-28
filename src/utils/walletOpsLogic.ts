@@ -174,13 +174,13 @@ export function generateTransaction(
 
   if (recipient && recipient.kycTier === 1) {
     const wouldBeVolume = recipient.monthlyVolume + amount
-    if (wouldBeVolume > TIER_LIMITS[1]) {
+    if (wouldBeVolume > TIER_MONTHLY_LIMITS[1]) {
       const blockedEntry: BlockedTx = {
         id: `BLK-${String(Date.now()).slice(-5)}`,
         time: now,
         userName: recipient.name,
         attemptedAmount: amount,
-        reason: `Tier 1 monthly limit (SAR ${TIER_LIMITS[1].toLocaleString()}) would be exceeded`,
+        reason: `Tier 1 monthly limit (SAR ${TIER_MONTHLY_LIMITS[1].toLocaleString()}) would be exceeded`,
         status: 'notified',
       }
       const failedTx: WalletTransaction = {
