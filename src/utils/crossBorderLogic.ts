@@ -241,11 +241,11 @@ function methodConfig(type: PaymentMethodType, corridor: PaymentCorridor): Omit<
   return {
     name: 'AFAQ / GCC RTGS',
     type,
-    description: 'GCC cross-border RTGS flow for SAR <-> AED participating banks',
+    description: 'GCC cross-border interbank settlement for SAR <-> AED participating banks',
     available,
     unavailableReason: 'Only available for SAR <-> AED corridors in this model',
-    timeline: available ? 'Real-time' : 'Not available',
-    timelineMinutes: available ? 1 : Number.POSITIVE_INFINITY,
+    timeline: available ? 'Same business day' : 'Not available',
+    timelineMinutes: available ? 480 : Number.POSITIVE_INFINITY,
     flowSteps: available
       ? ['Sender bank', 'Regional payment switch', 'Recipient bank']
       : ['No supported local network', 'Use SWIFT or stablecoin alternative'],
@@ -262,7 +262,7 @@ function methodConfig(type: PaymentMethodType, corridor: PaymentCorridor): Omit<
         ],
     bestFor: 'Regional bank transfers',
     transparency: available ? 'Medium' : 'N/A',
-    availability: available ? 'Local network hours' : 'Unavailable',
+    availability: available ? 'Business-day batch windows' : 'Unavailable',
     risk: available ? 'Low' : 'N/A',
     limits: available ? 'Bank and network limits' : 'N/A',
   }

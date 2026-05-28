@@ -317,7 +317,8 @@ export default function WalletOps() {
 
         {/* Footnote */}
         <p className="text-xs text-slate-400 leading-relaxed border-t border-slate-200 pt-4 mt-6">
-          * SAMA KYC tiers: Tier 1 SAR 5,000/month (basic ID), Tier 2 SAR 20,000/month (full KYC), Tier 3 SAR 200,000/month (business).
+          * SAMA e-wallet tiers (Payment Supervision Rules): Tier 1 SAR 5,000 wallet balance (basic ID), Tier 2 SAR 20,000 balance (full KYC),
+          Tier 3 SAR 200,000 balance (business). Monthly transaction throughput limits are set separately and are higher than balance caps.
           Operational cost rates: P2P 0.02%, bank top-up 0.30%, card top-up 2.10%, instant payout 0.85%, standard payout 0.15%.
           All figures are simulated planning models only.
         </p>

@@ -26,8 +26,9 @@ export const TX_TYPE_LABELS: Record<TxType, string> = {
   refund: 'Refund',
 }
 
-// ── KYC tier limits (SAR/month) ────────────────────────────────────────────
+// SAMA Payment Supervision Rules: balance limits vs. monthly throughput limits are distinct. These are balance/hold limits.
 export const TIER_LIMITS: Record<1 | 2 | 3, number> = { 1: 5000, 2: 20000, 3: 200000 }
+export const TIER_MONTHLY_LIMITS: Record<1 | 2 | 3, number> = { 1: 20000, 2: 60000, 3: 500000 }
 
 // ── Build ledger entries for a transaction ─────────────────────────────────
 function buildLedger(type: TxType, from: string, to: string, amount: number, cost: number): WalletTransaction['ledgerEntries'] {

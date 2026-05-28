@@ -47,10 +47,11 @@ function acquirerFee(inputs: SettlementInputs): number {
   return gross * (1 - codPct) * rate
 }
 
-// ── Gateway fee ───────────────────────────────────────────────────────────
+// Gateway fee: SAR 0.35 per transaction + 0.25% of volume
+// Reflects typical percentage-based pricing for Saudi payment gateways
 function gatewayFee(inputs: SettlementInputs): number {
   const gross = inputs.dailyVolume * inputs.avgTicketSize
-  return inputs.dailyVolume * 0.10 + gross * 0.003
+  return inputs.dailyVolume * 0.35 + gross * 0.0025
 }
 
 // ── Instant payout premium ────────────────────────────────────────────────
