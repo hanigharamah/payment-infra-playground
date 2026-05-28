@@ -72,12 +72,13 @@ export function processTransaction(
         fee: fbApproved ? calcFee(fallback, tx.amount) : 0,
         fallbackUsed: true,
         declineReason: fbApproved ? undefined : 'Fallback gateway declined',
+        routingLatencyMs: fbApproved ? fallback.latency : undefined,
       }
     }
 
     const approved = Math.random() * 100 < primary.successRate
     if (approved) {
-      return { ...tx, routedTo: primary.id, outcome: 'approved', matchedRule: rule.id, fee: calcFee(primary, tx.amount), fallbackUsed: false }
+      return { ...tx, routedTo: primary.id, outcome: 'approved', matchedRule: rule.id, fee: calcFee(primary, tx.amount), fallbackUsed: false, routingLatencyMs: primary.latency }
     }
 
     if (rule.action.fallbackGateway) {
@@ -92,6 +93,7 @@ export function processTransaction(
           fee: fbApproved ? calcFee(fallback, tx.amount) : 0,
           fallbackUsed: true,
           declineReason: fbApproved ? undefined : 'Fallback gateway declined',
+          routingLatencyMs: fbApproved ? fallback.latency : undefined,
         }
       }
     }

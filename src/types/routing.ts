@@ -40,6 +40,7 @@ export interface Transaction {
   matchedRule?: string
   fee?: number
   declineReason?: string
+  routingLatencyMs?: number
 }
 
 export type ScenarioId = 'custom' | 'mega_event' | 'super_app' | 'merchant_payouts'

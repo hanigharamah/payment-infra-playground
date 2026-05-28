@@ -31,6 +31,9 @@ export default function PerformanceDashboard({ transactions, gateways }: Props) 
     ? approved.reduce((s, t) => s + gwA.baseFee + (gwA.percentageFee / 100) * t.amount, 0)
     : 0
   const savings = gwAFees - totalFees
+  const avgLatencyMs = approved.length > 0
+    ? Math.round(approved.reduce((s, t) => s + (t.routingLatencyMs ?? 0), 0) / approved.length)
+    : 0
 
   const stats = computeGatewayStats(processed, gateways)
   const isProcessed = processed.length > 0
@@ -38,7 +41,7 @@ export default function PerformanceDashboard({ transactions, gateways }: Props) 
   return (
     <div className="space-y-6">
 
-      {/* 4 stat cards in a 2x2 grid */}
+      {/* 6 stat cards in a 2x3 grid */}
       <div className="grid grid-cols-2 gap-3">
         <StatCard label="Processed" value={isProcessed ? processed.length : '—'} sub="transactions" />
         <StatCard
@@ -59,18 +62,17 @@ export default function PerformanceDashboard({ transactions, gateways }: Props) 
           sub={isProcessed ? (savings >= 0 ? 'vs Checkout.com only' : 'over Checkout.com') : ''}
           color={savings >= 0 ? 'emerald' : 'red'}
         />
+        <StatCard
+          label="Total Fees"
+          value={isProcessed ? `$${totalFees.toFixed(2)}` : '—'}
+          sub="processing cost"
+        />
+        <StatCard
+          label="Avg Latency"
+          value={isProcessed ? `${avgLatencyMs}ms` : '—'}
+          sub="avg routing speed"
+        />
       </div>
-
-      {/* Total fees box */}
-      {isProcessed && (
-        <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
-          <p className="text-xs text-slate-500 mb-1">Total fees paid</p>
-          <p className="text-lg font-semibold tabular-nums text-slate-900">${totalFees.toFixed(2)}</p>
-          <p className="text-xs text-slate-400 tabular-nums">
-            vs ${gwAFees.toFixed(2)} routing all through Checkout.com
-          </p>
-        </div>
-      )}
 
       {/* Success rate chart — h-[180px] */}
       <div>
