@@ -107,63 +107,56 @@ export default function TransactionPanel({
                     : 'border-slate-100'
                 }`}
               >
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  {/* Left: ID + type */}
-                  <div className="flex items-center gap-3 min-w-0">
-                    <span className="font-mono text-xs text-slate-400 shrink-0">{tx.id}</span>
-                    <span className="inline-flex px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs font-medium shrink-0">
-                      {TYPE_LABELS[tx.transactionType] ?? tx.transactionType}
-                    </span>
-                  </div>
+                {/* Primary row: type · amount · → gateway · outcome */}
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center justify-center px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs font-medium shrink-0 w-14">
+                    {TYPE_LABELS[tx.transactionType] ?? tx.transactionType}
+                  </span>
+                  <span className="text-sm font-semibold tabular-nums text-slate-900 shrink-0">
+                    ${tx.amount.toFixed(2)}
+                  </span>
+                  <span className="text-xs text-slate-400 shrink-0">{tx.currency}</span>
 
-                  {/* Center: amount + currency */}
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    <span className="text-sm font-semibold tabular-nums text-slate-900">
-                      ${tx.amount.toFixed(2)}
-                    </span>
-                    <span className="text-xs text-slate-400">{tx.currency}</span>
-                  </div>
+                  <div className="flex-1" />
 
-                  {/* Right: routing outcome */}
-                  <div className="flex items-center gap-2 shrink-0">
-                    {tx.routedTo && (
-                      <>
-                        <ArrowRight size={12} className="text-slate-300" />
-                        <span className="text-xs font-medium text-slate-600">
-                          {gateway?.shortName ?? tx.routedTo}
-                          {tx.fallbackUsed && (
-                            <span className="text-slate-400"> (fb)</span>
-                          )}
-                        </span>
-                      </>
-                    )}
-                    {tx.outcome && (
-                      <span
-                        className={`inline-flex px-2 py-0.5 rounded text-xs font-semibold ${
-                          tx.outcome === 'approved'
-                            ? 'bg-emerald-50 text-emerald-700'
-                            : 'bg-red-50 text-red-600'
-                        }`}
-                      >
-                        {tx.outcome}
+                  {tx.routedTo && (
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <ArrowRight size={12} className="text-slate-300" />
+                      <span className="text-xs font-medium text-slate-600">
+                        {gateway?.shortName ?? tx.routedTo}
+                        {tx.fallbackUsed && <span className="text-slate-400"> (fb)</span>}
                       </span>
-                    )}
-                  </div>
+                    </div>
+                  )}
+                  {tx.outcome && (
+                    <span
+                      className={`inline-flex px-2 py-0.5 rounded text-xs font-semibold shrink-0 ${
+                        tx.outcome === 'approved'
+                          ? 'bg-emerald-50 text-emerald-700'
+                          : 'bg-red-50 text-red-600'
+                      }`}
+                    >
+                      {tx.outcome}
+                    </span>
+                  )}
                 </div>
 
-                {/* Matched rule — shown if processed */}
-                {matchedRule && (
-                  <div className="mt-1.5 ml-0">
-                    <span className="text-xs text-slate-400">
-                      Rule: {getRuleLabel(matchedRule)}
+                {/* Secondary row: ID · rule · fee */}
+                <div className="mt-1 flex items-center gap-1.5 text-xs text-slate-400 flex-wrap">
+                  <span className="font-mono">{tx.id}</span>
+                  {matchedRule && (
+                    <>
+                      <span className="text-slate-200">·</span>
+                      <span>{getRuleLabel(matchedRule)}</span>
                       {tx.fee !== undefined && tx.fee > 0 && (
-                        <span className="ml-2 tabular-nums">· Fee ${tx.fee.toFixed(2)}</span>
+                        <span className="tabular-nums">· Fee ${tx.fee.toFixed(2)}</span>
                       )}
-                    </span>
-                  </div>
-                )}
+                    </>
+                  )}
+                </div>
+
                 {tx.declineReason && (
-                  <p className="mt-1.5 text-xs text-red-600">{tx.declineReason}</p>
+                  <p className="mt-1 text-xs text-red-600">{tx.declineReason}</p>
                 )}
               </div>
             )
