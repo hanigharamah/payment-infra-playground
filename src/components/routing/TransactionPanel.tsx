@@ -108,37 +108,37 @@ export default function TransactionPanel({
                 }`}
               >
                 {/* Primary row: type · amount · → gateway · outcome */}
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center justify-center px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs font-medium shrink-0 w-14">
+                <div className="flex items-center gap-2 overflow-hidden">
+                  <span className="inline-flex items-center justify-center px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs font-medium flex-none w-14">
                     {TYPE_LABELS[tx.transactionType] ?? tx.transactionType}
                   </span>
-                  <span className="text-sm font-semibold tabular-nums text-slate-900 shrink-0">
+                  <span className="text-sm font-semibold tabular-nums text-slate-900 flex-none">
                     ${tx.amount.toFixed(2)}
                   </span>
-                  <span className="text-xs text-slate-400 shrink-0">{tx.currency}</span>
+                  <span className="text-xs text-slate-400 flex-none">{tx.currency}</span>
 
-                  <div className="flex-1" />
-
-                  {tx.routedTo && (
-                    <div className="flex items-center gap-1.5 shrink-0">
-                      <ArrowRight size={12} className="text-slate-300" />
-                      <span className="text-xs font-medium text-slate-600">
-                        {gateway?.shortName ?? tx.routedTo}
-                        {tx.fallbackUsed && <span className="text-slate-400"> (fb)</span>}
+                  <div className="ml-auto flex items-center gap-2 flex-none">
+                    {tx.routedTo && (
+                      <>
+                        <ArrowRight size={12} className="text-slate-300" />
+                        <span className="text-xs font-medium text-slate-600">
+                          {gateway?.shortName ?? tx.routedTo}
+                          {tx.fallbackUsed && <span className="text-slate-400"> (fb)</span>}
+                        </span>
+                      </>
+                    )}
+                    {tx.outcome && (
+                      <span
+                        className={`inline-flex px-2 py-0.5 rounded text-xs font-semibold ${
+                          tx.outcome === 'approved'
+                            ? 'bg-emerald-50 text-emerald-700'
+                            : 'bg-red-50 text-red-600'
+                        }`}
+                      >
+                        {tx.outcome}
                       </span>
-                    </div>
-                  )}
-                  {tx.outcome && (
-                    <span
-                      className={`inline-flex px-2 py-0.5 rounded text-xs font-semibold shrink-0 ${
-                        tx.outcome === 'approved'
-                          ? 'bg-emerald-50 text-emerald-700'
-                          : 'bg-red-50 text-red-600'
-                      }`}
-                    >
-                      {tx.outcome}
-                    </span>
-                  )}
+                    )}
+                  </div>
                 </div>
 
                 {/* Secondary row: ID · rule · fee */}
